@@ -68,3 +68,17 @@ const createTimeTable = () => {
 };
 
 createTimeTable();
+
+const selectedTimeSlots = new Set();
+
+const toggleTimeSlot = (tdElement) => {
+    const timeSlotId = `${tdElement.dataset.day}-${tdElement.dataset.time}`;
+
+    if (selectedTimeSlots.has(timeSlotId)) {
+        selectedTimeSlots.delete(timeSlotId);
+        tdElement.classList.remove("selected");
+    } else {
+        selectedTimeSlots.add(timeSlotId);
+        tdElement.classList.add("selected");
+    }
+};

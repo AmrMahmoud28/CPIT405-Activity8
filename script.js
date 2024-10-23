@@ -82,3 +82,39 @@ const toggleTimeSlot = (tdElement) => {
         tdElement.classList.add("selected");
     }
 };
+
+document.getElementById("submitMeeting").addEventListener("click", async () => {
+    const username = document.getElementById("user-name").value;
+    const eventName = document.getElementById("event-name").value;
+    if (!username || !eventName) {
+        alert("Please enter both username and event name");
+        return;
+    }
+
+    const bodyPayload = {
+        username: username,
+        eventName: eventName,
+        slots: [...selectedTimeSlots],
+    };
+
+    const API_URL = "https://jsonplaceholder.typicode.com/posts";
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyPayload),
+    });
+    if (!response.ok) {
+        alert("Failed to create meeting. Please try again later.");
+        return;
+    }
+
+    const data = await response.json();
+    console.log("Meeting created successfully:", data);
+    alert("Meeting created successfully!");
+    selectedTimeSlots.clear();
+    document.getElementById("user-name").value = "";
+    document.getElementById("event-name").value = "";
+    createTimeTable();
+});
